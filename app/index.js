@@ -10,7 +10,6 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, TouchableOpacity, ScrollView, Button, Image, Text, View, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 import Data from './components/data';
-import {createStackNavigator, createAppContainer} from 'react-navigation';
 
 var { width, height } = Dimensions.get('window');
 
@@ -254,11 +253,3 @@ const styles = StyleSheet.create({
     fontFamily: 'Karla-Regular',
   }
 });
-
-const AppNavigator = createStackNavigator({
-  Home: {
-    screen: HomeScreen
-  }
-});
-
-export default createAppContainer(AppNavigator);
