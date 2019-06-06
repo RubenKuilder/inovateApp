@@ -126,6 +126,24 @@ class HomeScreen extends Component<Props> {
 }
 
 class DetailsScreen extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      data: []
+    }
+  }
+
+  componentDidMount() {
+    fetch("https://testrest1.herokuapp.com/getglobalsensordata?sensor="+)
+    .then((result)=>result.json())
+    .then((res)=>{
+      console.warn("data from api", res);
+      this.setState({
+        data:res
+      })
+    })
+  }
+
   render() {
     const {navigation} = this.props;
     const itemId = navigation.getParam('itemId', 'NO-ID');
@@ -133,9 +151,18 @@ class DetailsScreen extends React.Component {
       <View>
         <Text>Details screen here!</Text>
         <Text>itemId: {JSON.stringify(itemId)}</Text>
-        <Button
-          title="Go back to home"
-          onPress={() => this.props.navigation.navigate('Home')}
+
+        <FlatList
+        data={[this.state.data]}
+        renderItem={ ({item}) =>
+          <View>
+            <Text>{item.datetime}</Text>
+            <Text>{item.humidity}</Text>
+            <Text>{item.metingID}</Text>
+            <Text>{item.sensorID}</Text>
+            <Text>{item.temperature}</Text>
+          </View>
+        }
         />
       </View>
     );
