@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, TouchableOpacity, ScrollView, Button, Image, Text, View, Dimensions} from 'react-native';
+import {Platform, StyleSheet, FlatList, TouchableOpacity, ScrollView, Button, Image, Text, View, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 import Data from './components/data';
 
@@ -18,25 +18,20 @@ var { width, height } = Dimensions.get('window');
 type Props = {};
 class HomeScreen extends Component<Props> {
   constructor() {
-    super()
-    this.state = {
+    super();
+    this.state={
       data: []
     }
   }
 
-  getData() {
-    return fetch('https://testrest1.herokuapp.com/getallsensors')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({data: responseJson.sensoren});
-      })
-      .catch((error) => {
-      console.error(error);
-    });
-  }
-
   componentDidMount() {
-    this.getData();
+    fetch("https://testrest1.herokuapp.com/getallsensors")
+    .then((result)=>result.json())
+    .then((res)=>{
+      this.setState({
+        data:res.sensoren
+      })
+    })
   }
 
   state = {
@@ -77,7 +72,25 @@ class HomeScreen extends Component<Props> {
             onPress={() => this.props.navigation.navigate('Details')}
           />
 
-          <Data data = {this.state.data} />
+          <FlatList
+            data={this.state.data}
+            renderItem={({item}) =>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() => {this.props.navigation.navigate('Details', {
+                itemId: item.sensorID,
+              });
+            }
+            }>
+              <Image style={styles.cardImage} source={{uri: item.imageURL}} />
+              <View style={styles.cardTextCont}>
+                <Text style={styles.cardTitle}>{item.locationname}</Text>
+                <Text style={styles.cardText}>{item.description}</Text>
+              </View>
+            </TouchableOpacity>
+          }
+          keyExtractor={(item, index) => index.toString()}
+          />
 
         </ScrollView>
 
@@ -117,6 +130,7 @@ class DetailsScreen extends React.Component {
     return (
       <View>
         <Text>Details screen here!</Text>
+        <Text>itemId: {JSON.stringify(itemId)}</Text>
         <Button
           title="Go back to home"
           onPress={() => this.props.navigation.navigate('Home')}
