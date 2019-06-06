@@ -127,6 +127,8 @@ class HomeScreen extends Component<Props> {
 
 class DetailsScreen extends React.Component {
   render() {
+    const {navigation} = this.props;
+    const itemId = navigation.getParam('itemId', 'NO-ID');
     return (
       <View>
         <Text>Details screen here!</Text>
