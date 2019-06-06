@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, TouchableOpacity, ScrollView, Button, Image, Text, View, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 
+import { createStackNavigator, createAppContainer } from 'react-navigation';
+
 var { width, height } = Dimensions.get('window');
 
 const instructions = Platform.select({

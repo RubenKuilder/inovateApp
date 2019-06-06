@@ -14,7 +14,10 @@ import Data from './components/data';
 var { width, height } = Dimensions.get('window');
 
 type Props = {};
-export default class index extends Component<Props> {
+export default class HomeScreen extends Component<Props> {
+  static navigationOptions = {
+    title: "Welcome",
+  };
 
   constructor() {
     super()
@@ -47,6 +50,7 @@ export default class index extends Component<Props> {
   };
 
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View>
         <ScrollView style={styles.container}>
@@ -69,6 +73,11 @@ export default class index extends Component<Props> {
               <Image style={styles.filterImg} source={require('./assets/images/filter.png')} />
             </TouchableOpacity>
           </View>
+
+          <Button
+            title="Go to info page"
+            onPress={() => navigate('Profile', {name: 'Jane'})}
+          />
 
           <Data data = {this.state.data} />
 

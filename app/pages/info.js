@@ -23,58 +23,11 @@ const instructions = Platform.select({
 
 
 type Props = {};
-export default class index extends Component<Props> {
-
-  constructor() {
-    super()
-    this.state = {
-      data: []
-    }
-  }
-
-  getData() {
-    return fetch('https://facebook.github.io/react-native/movies.json')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({data: responseJson.movies});
-      })
-      .catch((error) => {
-      console.error(error);
-    });
-  }
-
-  componentDidMount() {
-    this.getData();
-  }
-
-  state = {
-    isModalVisible: false
-  };
-
-  toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
-
+export default class InfoScreen extends Component<Props> {
   render() {
     return (
       <View>
-        <ScrollView style={styles.container}>
-          <View style={styles.header}>
-            <View style={styles.hdrLeftBtn}>
-              <Text>0</Text>
-            </View>
-            <View style={styles.hdrCtr}>
-              <View style={styles.hdrCtrTop}>
-                <Text style={styles.hdrTitle}>
-                  ICT Boven
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          <Text>Info page here</Text>
-
-        </ScrollView>
+        <Text>Info page here!</Text>
       </View>
     );
   }
