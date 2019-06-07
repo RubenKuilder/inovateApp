@@ -150,11 +150,17 @@ class DetailsScreen extends React.Component {
             <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
           </TouchableOpacity>
           <View style={styles.hdrCtr}>
-            <View style={styles.hdrCtrTop}>
-              <Text style={styles.hdrTitle}>
-                Locations
-              </Text>
-            </View>
+                 <FlatList
+                  data={[this.state.data]}
+                  renderItem={ ({item}) => 
+                    <View style={styles.hdrCtrTop}>
+                     <Text style={styles.hdrTitle}>
+                      {item.locationname}
+                     </Text>
+                    </View>
+                  }
+                  />
+
           </View>
         </View>
 
