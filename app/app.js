@@ -148,17 +148,12 @@ class DetailsScreen extends React.Component {
       <View>
         <View style={styles.header}>
             <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Home')}>
-              <Image style={styles.filterImg} source={require('./assets/images/filter.png')} />
+              <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
             </TouchableOpacity>
             <View style={styles.hdrCtr}>
               <View style={styles.hdrCtrTop}>
                 <Text style={styles.hdrTitle}>
                   Locations
-                </Text>
-              </View>
-              <View style={styles.hdrCtrBottom}>
-                <Text style={styles.hdrSubTitle}>
-                  No filter applied
                 </Text>
               </View>
             </View>
@@ -272,8 +267,14 @@ const styles = StyleSheet.create({
   hdrLeftBtn: {
     width: 25,
     marginLeft: 10,
+    marginTop: -18,
+    justifyContent: 'center',
     //flex: 1,
     //backgroundColor: 'red',
+  },
+  arrowImage: {
+    width: 5,
+    height: 8,
   },
   hdrCtr: {
     flex: 8,
