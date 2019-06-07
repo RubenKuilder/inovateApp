@@ -134,6 +134,7 @@ class DetailsScreen extends React.Component {
     fetch("https://testrest1.herokuapp.com/getglobalsensordata?sensor="+itemId)
     .then((result)=>result.json())
     .then((res)=>{
+      console.warn("data from api", res);
       this.setState({
         data:res
       })
@@ -157,34 +158,19 @@ class DetailsScreen extends React.Component {
               </View>
             </View>
           </View>
-
         <FlatList
         data={[this.state.data]}
         renderItem={ ({item}) =>
+
           <View>
-            <View style={styles.detailContainer}>
-              <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.datetime}</Text>
-            </View>
-            <View style={styles.detailContainer}>
-              <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.humidity}</Text>
-            </View>
-            <View style={styles.detailContainer}>
-              <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.metingID}</Text>
-            </View>
-            <View style={styles.detailContainer}>
-              <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.sensorID}</Text>
-            </View>
-            <View style={styles.detailContainer}>
-              <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.temperature}</Text>
-            </View>
+
+            <Text>{item.datetime}</Text>
+            <Text>{item.humidity}</Text>
+            <Text>{item.metingID}</Text>
+            <Text>{item.sensorID}</Text>
+            <Text>{item.temperature}</Text>
           </View>
         }
-        keyExtractor={(item, index) => index.toString()}
         />
       </View>
     );
@@ -355,27 +341,6 @@ const styles = StyleSheet.create({
     fontSize:12,
     color:'#252525',
     fontFamily: 'Karla-Regular',
-  },
-  detailContainer: {
-    flex: 1,
-    marginBottom: 4,
-  },
-  detailText: {
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 40,
-    fontFamily: 'Karla-Regular',
-    fontSize: 20,
-    color: '#252525',
-  },
-  detailBorder: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    width: 4,
-    backgroundColor: 'red',
   }
 });
 
