@@ -146,13 +146,29 @@ class DetailsScreen extends React.Component {
     const itemId = navigation.getParam('itemId', 'NO-ID');
     return (
       <View>
-        <Text>Details screen here!</Text>
-        <Text>itemId: {JSON.stringify(itemId)}</Text>
-
+        <View style={styles.header}>
+            <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Home')}>
+              <Image style={styles.filterImg} source={require('./assets/images/filter.png')} />
+            </TouchableOpacity>
+            <View style={styles.hdrCtr}>
+              <View style={styles.hdrCtrTop}>
+                <Text style={styles.hdrTitle}>
+                  Locations
+                </Text>
+              </View>
+              <View style={styles.hdrCtrBottom}>
+                <Text style={styles.hdrSubTitle}>
+                  No filter applied
+                </Text>
+              </View>
+            </View>
+          </View>
         <FlatList
         data={[this.state.data]}
         renderItem={ ({item}) =>
+
           <View>
+
             <Text>{item.datetime}</Text>
             <Text>{item.humidity}</Text>
             <Text>{item.metingID}</Text>
