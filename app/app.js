@@ -67,11 +67,6 @@ class HomeScreen extends Component<Props> {
             </TouchableOpacity>
           </View>
 
-          <Button
-            title="Go to info page"
-            onPress={() => this.props.navigation.navigate('Details')}
-          />
-
           <FlatList
             data={this.state.data}
             renderItem={({item}) =>
@@ -173,8 +168,8 @@ class DetailsScreen extends React.Component {
 
 const AppNavigator = createStackNavigator(
   {
-    Home: HomeScreen,
-    Details: DetailsScreen
+    Home: { screen: HomeScreen, navigationOptions: { header: null } },
+    Details: { screen: DetailsScreen, navigationOptions: { header: null } },
   },
   {
     initialRouteName: "Home"

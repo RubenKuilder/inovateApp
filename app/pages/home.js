@@ -17,6 +17,7 @@ type Props = {};
 export default class HomeScreen extends Component<Props> {
   static navigationOptions = {
     title: "Welcome",
+    visible: false,
   };
 
   constructor() {
