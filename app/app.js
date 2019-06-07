@@ -11,6 +11,15 @@ import {Platform, StyleSheet, FlatList, TouchableOpacity, ScrollView, Button, Im
 import Modal from 'react-native-modal';
 import Data from './components/data';
 
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart
+} from 'react-native-chart-kit'
+
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 var { width, height } = Dimensions.get('window');
@@ -202,20 +211,39 @@ class GraphScreen extends React.Component {
   render() {
     return(
       <View>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Details')}>
-            <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
-          </TouchableOpacity>
-          <View style={styles.hdrCtr}>
-            <View style={styles.hdrCtrTop}>
-              <Text style={styles.hdrTitle}>
-                Locations
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        <Text>Test</Text>
+        <Text>
+          Bezier Line Chart
+        </Text>
+        <LineChart
+          data={{
+            labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+            datasets: [{
+              data: [
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100
+              ]
+            }]
+          }}
+          width={Dimensions.get('window').width} // from react-native
+          height={220}
+          yAxisLabel={'$'}
+          chartConfig={{
+            backgroundColor: '#e26a00',
+            backgroundGradientFrom: '#fb8c00',
+            backgroundGradientTo: '#ffa726',
+            decimalPlaces: 2, // optional, defaults to 2dp
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          }}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16
+          }}
+        />
       </View>
     )
   }
