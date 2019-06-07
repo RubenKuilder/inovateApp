@@ -380,6 +380,27 @@ const styles = StyleSheet.create({
     fontSize:12,
     color:'#252525',
     fontFamily: 'Karla-Regular',
+  },
+  detailContainer: {
+    flex: 1,
+    marginBottom: 4,
+  },
+  detailBorder: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    width: 4,
+    backgroundColor: 'red',
+  },
+  detailText: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 35,
+    fontFamily: 'Karla-Regular',
+    fontSize: 20,
+    color: '#252525',
   }
 });
 
