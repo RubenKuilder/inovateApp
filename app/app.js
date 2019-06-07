@@ -146,42 +146,42 @@ class DetailsScreen extends React.Component {
     return (
       <View>
         <View style={styles.header}>
-            <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Home')}>
-              <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
-            </TouchableOpacity>
-            <View style={styles.hdrCtr}>
-              <View style={styles.hdrCtrTop}>
-                <Text style={styles.hdrTitle}>
-                  Locations
-                </Text>
-              </View>
+          <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Home')}>
+            <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
+          </TouchableOpacity>
+          <View style={styles.hdrCtr}>
+            <View style={styles.hdrCtrTop}>
+              <Text style={styles.hdrTitle}>
+                Locations
+              </Text>
             </View>
           </View>
+        </View>
 
         <FlatList
         data={[this.state.data]}
         renderItem={ ({item}) =>
           <View>
-            <View style={styles.detailContainer}>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
               <Text style={styles.detailText}>{item.datetime}</Text>
-            </View>
-            <View style={styles.detailContainer}>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
               <Text style={styles.detailText}>{item.humidity}</Text>
-            </View>
-            <View style={styles.detailContainer}>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
               <Text style={styles.detailText}>{item.metingID}</Text>
-            </View>
-            <View style={styles.detailContainer}>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
               <Text style={styles.detailText}>{item.sensorID}</Text>
-            </View>
-            <View style={styles.detailContainer}>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
               <Text style={styles.detailText}>{item.temperature}</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         }
         keyExtractor={(item, index) => index.toString()}
@@ -191,10 +191,34 @@ class DetailsScreen extends React.Component {
   }
 }
 
+class GraphScreen extends React.Component {
+  render() {
+    return(
+      <View>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Details')}>
+            <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
+          </TouchableOpacity>
+          <View style={styles.hdrCtr}>
+            <View style={styles.hdrCtrTop}>
+              <Text style={styles.hdrTitle}>
+                Locations
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <Text>Test</Text>
+      </View>
+    )
+  }
+}
+
 const AppNavigator = createStackNavigator(
   {
     Home: { screen: HomeScreen, navigationOptions: { header: null } },
     Details: { screen: DetailsScreen, navigationOptions: { header: null } },
+    Graph: { screen: GraphScreen, navigationOptions: { header: null } },
   },
   {
     initialRouteName: "Home"
