@@ -134,7 +134,6 @@ class DetailsScreen extends React.Component {
     fetch("https://testrest1.herokuapp.com/getglobalsensordata?sensor="+itemId)
     .then((result)=>result.json())
     .then((res)=>{
-      console.warn("data from api", res);
       this.setState({
         data:res
       })
@@ -157,17 +156,13 @@ class DetailsScreen extends React.Component {
               </Text>
             </View>
           </View>
-<<<<<<< HEAD
         </View>
 
-=======
->>>>>>> 8cbf01b6bb1892b0d1a5efd37f1959d5b424ac98
         <FlatList
         data={[this.state.data]}
         renderItem={ ({item}) =>
 
           <View>
-<<<<<<< HEAD
             <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
               <Text style={styles.detailText}>{item.datetime}</Text>
@@ -188,16 +183,9 @@ class DetailsScreen extends React.Component {
               <View style={styles.detailBorder}></View>
               <Text style={styles.detailText}>{item.temperature}</Text>
             </TouchableOpacity>
-=======
-
-            <Text>{item.datetime}</Text>
-            <Text>{item.humidity}</Text>
-            <Text>{item.metingID}</Text>
-            <Text>{item.sensorID}</Text>
-            <Text>{item.temperature}</Text>
->>>>>>> 8cbf01b6bb1892b0d1a5efd37f1959d5b424ac98
           </View>
         }
+        keyExtractor={(item, index) => index.toString()}
         />
       </View>
     );
