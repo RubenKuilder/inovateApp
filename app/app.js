@@ -134,7 +134,9 @@ class DetailsScreen extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://testrest1.herokuapp.com/getglobalsensordata?sensor="+)
+    const {navigation} = this.props;
+    const itemId = navigation.getParam('itemId', 'NO-ID');
+    fetch("https://testrest1.herokuapp.com/getglobalsensordata?sensor="+itemId)
     .then((result)=>result.json())
     .then((res)=>{
       console.warn("data from api", res);
