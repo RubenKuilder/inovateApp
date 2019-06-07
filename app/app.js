@@ -168,6 +168,7 @@ class DetailsScreen extends React.Component {
                      </Text>
                     </View>
                   }
+                  keyExtractor={(item, index) => index.toString()}
                   />
 
           </View>
@@ -211,9 +212,18 @@ class GraphScreen extends React.Component {
   render() {
     return(
       <View>
-        <Text>
-          Bezier Line Chart
-        </Text>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Home')}>
+            <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
+          </TouchableOpacity>
+          <View style={styles.hdrCtr}>
+            <View style={styles.hdrCtrTop}>
+             <Text style={styles.hdrTitle}>
+              Title here
+             </Text>
+            </View>
+          </View>
+      </View>
         <LineChart
           data={{
             labels: ['January', 'February', 'March', 'April', 'May', 'June'],
@@ -230,18 +240,19 @@ class GraphScreen extends React.Component {
           }}
           width={Dimensions.get('window').width} // from react-native
           height={220}
-          yAxisLabel={'$'}
+          //yAxisLabel={'$'}
           chartConfig={{
-            backgroundColor: '#e26a00',
-            backgroundGradientFrom: '#fb8c00',
-            backgroundGradientTo: '#ffa726',
+            backgroundColor: '#fff',
+            backgroundGradientFrom: '#fff',
+            backgroundGradientTo: '#fff',
             decimalPlaces: 2, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            color: (opacity = 1) => `rgba(3, 169, 244, ${opacity})`,
+            strokeWidth: 4,
           }}
           bezier
           style={{
             marginVertical: 8,
-            borderRadius: 16
+            color: "#000000",
           }}
         />
       </View>
