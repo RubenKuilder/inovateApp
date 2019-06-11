@@ -226,7 +226,7 @@ class GraphScreen extends React.Component {
       </View>
         <LineChart
           data={{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'poepje', 'plasje',],
             datasets: [{
               data: [
                 Math.random() * 100,
@@ -234,7 +234,9 @@ class GraphScreen extends React.Component {
                 Math.random() * 100,
                 Math.random() * 100,
                 Math.random() * 100,
-                Math.random() * 100
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
               ]
             }]
           }}
