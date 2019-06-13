@@ -10,15 +10,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, FlatList, TouchableOpacity, ScrollView, Button, Image, Text, View, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 import Data from './components/data';
-
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart
-} from 'react-native-chart-kit'
+import {LineChart} from 'react-native-charts-wrapper';  
 
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
@@ -153,8 +145,8 @@ class DetailsScreen extends React.Component {
     const {navigation} = this.props;
     const itemId = navigation.getParam('itemId', 'NO-ID');
     return (
-      <View>
-        <View style={styles.header}>
+      <ScrollView>
+        <View style={styles.detailHeader}>
           <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Home')}>
             <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
           </TouchableOpacity>
@@ -170,40 +162,38 @@ class DetailsScreen extends React.Component {
                   }
                   keyExtractor={(item, index) => index.toString()}
                   />
-
           </View>
         </View>
 
         <FlatList
         data={[this.state.data]}
         renderItem={ ({item}) =>
-
-          <View>
+          <View>  
+            <Image style={styles.detailImage} source={{uri: item.imageURL}} />
+            <View style={styles.detailContainer}>
+              <Text style={styles.detailDateText}>Last Synced  {item.datetime}</Text>
+            </View>
             <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.datetime}</Text>
+              <Text style={styles.detailText}>{item.airquality}%  Air Quality</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.humidity}</Text>
+              <Text style={styles.detailText}>{item.temperature}° Celcius</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.metingID}</Text>
+              <Text style={styles.detailText}>{item.humidity}%  Humidity</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.sensorID}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
-              <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.temperature}</Text>
+              <Text style={styles.detailText}>{item.pressure}  Kilo Pascal</Text>
             </TouchableOpacity>
           </View>
         }
         keyExtractor={(item, index) => index.toString()}
         />
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -428,6 +418,12 @@ const styles = StyleSheet.create({
     color:'#252525',
     fontFamily: 'Karla-Regular',
   },
+  detailHeader: {
+    paddingTop: 20,
+    paddingBottom: 10,
+    height: 70,
+    flexDirection: 'row',
+  },
   detailContainer: {
     flex: 1,
     marginBottom: 4,
@@ -448,6 +444,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Karla-Regular',
     fontSize: 20,
     color: '#252525',
+  },
+  detailDateText: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 35,
+    fontFamily: 'Karla-Regular',
+    fontSize: 17,
+    color: '#252525',
+  },
+  detailImage: {
+    width:'100%',
+    height:200,
+    resizeMode:'cover',
   }
 });
 
