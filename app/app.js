@@ -10,8 +10,9 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, FlatList, TouchableOpacity, ScrollView, Button, Image, Text, View, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 import Data from './components/data';
+import {LineChart} from 'react-native-charts-wrapper';  
+
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import { LineChart, YAxis, Grid } from 'react-native-svg-charts';
 
 var { width, height } = Dimensions.get('window');
 
@@ -198,35 +199,7 @@ class DetailsScreen extends React.Component {
 }
 
 class GraphScreen extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      labelsTest: [],
-      valuesTest: [],
-    }
-  }
-
-  componentDidMount() {
-    fetch("https://testrest1.herokuapp.com/testjson")
-    .then((result)=>result.json())
-    .then((res)=>{
-      this.setState({
-
-        labelsTest: res.map(obj => {
-          return obj.label;
-        }),
-
-        valuesTest: res.map(obj => {
-          return obj.value;
-        }),
-      });
-    })
-  }
-
   render() {
-    const data = this.state.valuesTest;
-    const contentInset = { top: 20, bottom: 20 };
-
     return(
       <View>
         <View style={styles.header}>
@@ -240,29 +213,40 @@ class GraphScreen extends React.Component {
              </Text>
             </View>
           </View>
-        </View>
-
-        <View style={{ height: 200, flexDirection: 'row' }}>
-                <YAxis
-                    data={ data }
-                    contentInset={ contentInset }
-                    svg={{
-                        fill: 'grey',
-                        fontSize: 10,
-                    }}
-                    numberOfTicks={ 5 }
-                    formatLabel={ value => `${value}ºC` }
-                />
-                <LineChart
-                    style={{ flex: 1, marginLeft: 16 }}
-                    data={ data }
-                    svg={{ stroke: 'rgb(134, 65, 244)' }}
-                    contentInset={ contentInset }
-                >
-                    <Grid/>
-                </LineChart>
-            </View>
-
+      </View>
+        <LineChart
+          data={{
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'poepje', 'plasje',],
+            datasets: [{
+              data: [
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+              ]
+            }]
+          }}
+          width={Dimensions.get('window').width} // from react-native
+          height={220}
+          //yAxisLabel={'$'}
+          chartConfig={{
+            backgroundColor: '#fff',
+            backgroundGradientFrom: '#fff',
+            backgroundGradientTo: '#fff',
+            decimalPlaces: 2, // optional, defaults to 2dp
+            color: (opacity = 1) => `rgba(3, 169, 244, ${opacity})`,
+            strokeWidth: 4,
+          }}
+          bezier
+          style={{
+            marginVertical: 8,
+            color: "#000000",
+          }}
+        />
       </View>
     )
   }
