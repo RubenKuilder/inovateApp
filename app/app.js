@@ -124,7 +124,8 @@ class DetailsScreen extends React.Component {
   constructor() {
     super();
     this.state = {
-      data: []
+      data: [],
+      airqualityColor: null
     }
   }
 
@@ -138,9 +139,17 @@ class DetailsScreen extends React.Component {
         data:res
       })
     })
+
+    if(this.state.data.airquality < 20) {
+      state = {airquality: 'red'};
+    } else if(this.state.data.airquality > 30) {
+      state = {airquality: 'green'};
+    }
   }
 
   render() {
+    console.warn(this.state.airqualityColor);
+
     const {navigation} = this.props;
     const itemId = navigation.getParam('itemId', 'NO-ID');
     return (
