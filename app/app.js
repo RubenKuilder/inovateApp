@@ -144,35 +144,51 @@ class DetailsScreen extends React.Component {
       })
 
       if(res.airquality < 20) {
-        this.setState({ airqualityColor: "red" });
+        this.setState({ temperatureColor: "#76ff03" });
       } else if(res.airquality > 30) {
-        this.setState({ airqualityColor: "green" });
+        this.setState({ temperatureColor: "#c6ff00" });
+      } else if(res.airquality > 30) {
+        this.setState({ temperatureColor: "#ffff00" });
+      } else if(res.airquality > 30) {
+        this.setState({ temperatureColor: "#ffb300" });
       } else {
-        this.setState({ airqualityColor: "orange" });
+        this.setState({ temperatureColor: "#ff3d00" });
       }
 
-      if(res.airquality < 20) {
-        this.setState({ temperatureColor: "red" });
-      } else if(res.airquality > 30) {
-        this.setState({ temperatureColor: "green" });
+      if(res.temperature < 10) {
+        this.setState({ airqualityColor: "#2196f3" });
+      } else if(res.temperature < 15) {
+        this.setState({ airqualityColor: "#ba68c8" });
+      } else if(res.temperature < 20) {
+        this.setState({ airqualityColor: "#ffb300" });
+      } else if(res.temperature < 25) {
+        this.setState({ airqualityColor: "#ff6f00" });
       } else {
-        this.setState({ temperatureColor: "orange" });
+        this.setState({ airqualityColor: "#ff3d00" });
       }
 
-      if(res.airquality < 20) {
-        this.setState({ humidityColor: "red" });
-      } else if(res.airquality > 30) {
-        this.setState({ humidityColor: "green" });
+      if(res.humidity < 20) {
+        this.setState({ humidityColor: "#bbdefb" });
+      } else if(res.humidity < 30) {
+        this.setState({ humidityColor: "#64b5tf6" });
+      } else if(res.humidity < 40) {
+        this.setState({ humidityColor: "#1e88e5" });
       } else {
-        this.setState({ humidityColor: "orange" });
+        this.setState({ humidityColor: "#1565c0" });
       }
 
-      if(res.airquality < 20) {
-        this.setState({ pressureColor: "red" });
-      } else if(res.airquality > 30) {
-        this.setState({ pressureColor: "green" });
+      if(res.pressure < 800) {
+        this.setState({ pressureColor: "#f3e5f5" });
+      } else if(res.pressure < 900) {
+        this.setState({ pressureColor: "#e1bee7" });
+      } else if(res.pressure < 1000) {
+        this.setState({ pressureColor: "#ce93d8" });
+      } else if(res.pressure < 1100) {
+        this.setState({ pressureColor: "#ba68c8" });
+      } else if(res.pressure < 1200) {
+        this.setState({ pressureColor: "#ab47bc" });
       } else {
-        this.setState({ pressureColor: "orange" });
+        this.setState({ pressureColor: "#9c27b0" });
       }
     })
   }
