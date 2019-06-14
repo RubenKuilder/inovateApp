@@ -10,7 +10,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, FlatList, TouchableOpacity, ScrollView, Button, Image, Text, View, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 import Data from './components/data';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator, createAppContainer } from- 'react-navigation';
 import { LineChart, YAxis, Grid } from 'react-native-svg-charts';
 
 var { width, height } = Dimensions.get('window');
@@ -124,8 +124,7 @@ class DetailsScreen extends React.Component {
   constructor() {
     super();
     this.state = {
-      data: [],
-      airqualityColor: null
+      data: []
     }
   }
 
@@ -139,17 +138,9 @@ class DetailsScreen extends React.Component {
         data:res
       })
     })
-
-    if(this.state.data.airquality < 20) {
-      state = {airquality: 'red'};
-    } else if(this.state.data.airquality > 30) {
-      state = {airquality: 'green'};
-    }
   }
 
   render() {
-    console.warn(this.state.airqualityColor);
-
     const {navigation} = this.props;
     const itemId = navigation.getParam('itemId', 'NO-ID');
     return (
@@ -195,7 +186,7 @@ class DetailsScreen extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
               <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.pressure}  Kilo Pascal</Text>
+              <Text style={styles.detailText}>{item.pressure}  Hecto Pascal</Text>
             </TouchableOpacity>
           </View>
         }
@@ -238,7 +229,7 @@ class GraphScreen extends React.Component {
     const labelLength = this.state.labelsTest.length - 1;
 
     return(
-      <View>
+      <ScrollView>
         <View style={styles.header}>
           <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Details')}>
             <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
@@ -282,7 +273,7 @@ class GraphScreen extends React.Component {
           <Text style={styles.infoText}>Too cold is not good and too hot is definitely disastrous. A temperature around 18 ° C is the most ideal temperature to study.</Text>
         </View>
 
-      </View>
+      </ScrollView>
     )
   }
 }
