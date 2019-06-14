@@ -12,6 +12,7 @@ import Modal from 'react-native-modal';
 import Data from './components/data';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import { LineChart, YAxis, Grid } from 'react-native-svg-charts';
+import * as shape from 'd3-shape';
 
 var { width, height } = Dimensions.get('window');
 
@@ -125,7 +126,10 @@ class DetailsScreen extends React.Component {
     super();
     this.state = {
       data: [],
-      airqualityColor: null
+      airqualityColor: "",
+      temperatureColor: "",
+      humidityColor: "",
+      pressureColor: "",
     }
   }
 
@@ -138,39 +142,68 @@ class DetailsScreen extends React.Component {
       this.setState({
         data:res
       })
-    })
 
-    if(this.state.data.airquality < 20) {
-      state = {airquality: 'red'};
-    } else if(this.state.data.airquality > 30) {
-      state = {airquality: 'green'};
-    }
+      if(res.airquality < 20) {
+        this.setState({ airqualityColor: "red" });
+      } else if(res.airquality > 30) {
+        this.setState({ airqualityColor: "green" });
+      } else {
+        this.setState({ airqualityColor: "orange" });
+      }
+
+      if(res.airquality < 20) {
+        this.setState({ temperatureColor: "red" });
+      } else if(res.airquality > 30) {
+        this.setState({ temperatureColor: "green" });
+      } else {
+        this.setState({ temperatureColor: "orange" });
+      }
+
+      if(res.airquality < 20) {
+        this.setState({ humidityColor: "red" });
+      } else if(res.airquality > 30) {
+        this.setState({ humidityColor: "green" });
+      } else {
+        this.setState({ humidityColor: "orange" });
+      }
+
+      if(res.airquality < 20) {
+        this.setState({ pressureColor: "red" });
+      } else if(res.airquality > 30) {
+        this.setState({ pressureColor: "green" });
+      } else {
+        this.setState({ pressureColor: "orange" });
+      }
+    })
   }
 
   render() {
-    console.warn(this.state.airqualityColor);
-
     const {navigation} = this.props;
     const itemId = navigation.getParam('itemId', 'NO-ID');
     return (
       <ScrollView>
-        <View style={styles.detailHeader}>
+        <View style={styles.header}>
           <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Home')}>
             <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
           </TouchableOpacity>
-          <View style={styles.hdrCtr}>
                  <FlatList
                   data={[this.state.data]}
                   renderItem={ ({item}) => 
-                    <View style={styles.hdrCtrTop}>
-                     <Text style={styles.hdrTitle}>
-                      {item.locationname}
-                     </Text>
+                    <View style={styles.hdrCtr}>
+                      <View style={styles.hdrCtrTop}>
+                       <Text style={styles.hdrTitle}>
+                        {item.locationname}
+                       </Text>
+                      </View>
+                      <View style={styles.hdrCtrBottom}>
+                        <Text style={[styles.hdrSubTitle, {marginTop: 5}]}>
+                          Last Synced {item.datetime}
+                        </Text>
+                      </View>
                     </View>
                   }
                   keyExtractor={(item, index) => index.toString()}
                   />
-          </View>
         </View>
 
         <FlatList
@@ -178,24 +211,22 @@ class DetailsScreen extends React.Component {
         renderItem={ ({item}) =>
           <View>  
             <Image style={styles.detailImage} source={{uri: item.imageURL}} />
-            <View style={styles.detailContainer}>
-              <Text style={styles.detailDateText}>Last Synced  {item.datetime}</Text>
-            </View>
-            <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
-              <View style={styles.detailBorder}></View>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, })}}>
+              <View style={[styles.detailBorder, {backgroundColor: this.state.airqualityColor}]}></View>
               <Text style={styles.detailText}>{item.airquality}%  Air Quality</Text>
+              <Text>More info ></Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
-              <View style={styles.detailBorder}></View>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, })}}>
+              <View style={[styles.detailBorder, {backgroundColor: this.state.temperatureColor}]}></View>
               <Text style={styles.detailText}>{item.temperature}° Celcius</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
-              <View style={styles.detailBorder}></View>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, })}}>
+              <View style={[styles.detailBorder, {backgroundColor: this.state.humidityColor}]}></View>
               <Text style={styles.detailText}>{item.humidity}%  Humidity</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailContainer} onPress={() => this.props.navigation.navigate('Graph')}>
-              <View style={styles.detailBorder}></View>
-              <Text style={styles.detailText}>{item.pressure}  Kilo Pascal</Text>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, })}}>
+              <View style={[styles.detailBorder, {backgroundColor: this.state.pressureColor}]}></View>
+              <Text style={styles.detailText}>{item.pressure}  Hecto Pascal</Text>
             </TouchableOpacity>
           </View>
         }
@@ -216,16 +247,18 @@ class GraphScreen extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://testrest1.herokuapp.com/testjson")
+    const {navigation} = this.props;
+    const itemId = navigation.getParam('itemId', 'NO-ID');
+    fetch("https://testrest1.herokuapp.com/getchartdata?sensor="+ itemId +"&quantity=temp")
     .then((result)=>result.json())
     .then((res)=>{
       this.setState({
 
-        labelsTest: res.map(obj => {
+        labelsTest: res.metingen.map(obj => {
           return obj.label;
         }),
 
-        valuesTest: res.map(obj => {
+        valuesTest: res.metingen.map(obj => {
           return obj.value;
         }),
       });
@@ -233,12 +266,16 @@ class GraphScreen extends React.Component {
   }
 
   render() {
+    const {navigation} = this.props;
+    const itemId = navigation.getParam('itemId', 'NO-ID');
     const data = this.state.valuesTest;
     const contentInset = { top: 20, bottom: 20 };
     const labelLength = this.state.labelsTest.length - 1;
 
+    console.warn(itemId);
+
     return(
-      <View>
+      <ScrollView>
         <View style={styles.header}>
           <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Details')}>
             <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
@@ -266,6 +303,7 @@ class GraphScreen extends React.Component {
           <LineChart
             style={{ flex: 1, marginLeft: 7 }}
             data={ data }
+            curve={ shape.curveNatural }
             svg={{ stroke: 'rgb(134, 65, 244)' }}
             contentInset={ contentInset }
           >
@@ -282,7 +320,7 @@ class GraphScreen extends React.Component {
           <Text style={styles.infoText}>Too cold is not good and too hot is definitely disastrous. A temperature around 18 ° C is the most ideal temperature to study.</Text>
         </View>
 
-      </View>
+      </ScrollView>
     )
   }
 }
@@ -453,12 +491,6 @@ const styles = StyleSheet.create({
     color:'#252525',
     fontFamily: 'Karla-Regular',
   },
-  detailHeader: {
-    paddingTop: 20,
-    paddingBottom: 10,
-    height: 70,
-    flexDirection: 'row',
-  },
   detailContainer: {
     flex: 1,
     marginBottom: 4,
@@ -470,7 +502,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     width: 4,
-    backgroundColor: 'red',
   },
   detailText: {
     paddingTop: 20,
@@ -492,6 +523,7 @@ const styles = StyleSheet.create({
     width:'100%',
     height:200,
     resizeMode:'cover',
+    marginBottom: 10,
   },
   chart: {
     height: 200,
@@ -514,7 +546,7 @@ const styles = StyleSheet.create({
     fontSize: 21,
     fontFamily: 'Lato-Bold',
     color: '#252525',
-    paddingBottom: 10,
+    paddingBottom: 5,
   },
   infoText: {
     fontSize: 16,
