@@ -226,11 +226,12 @@ class GraphScreen extends React.Component {
   render() {
     const data = this.state.valuesTest;
     const contentInset = { top: 20, bottom: 20 };
+    const labelLength = this.state.labelsTest.length - 1;
 
     return(
       <View>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Home')}>
+          <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Details')}>
             <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
           </TouchableOpacity>
           <View style={styles.hdrCtr}>
@@ -242,26 +243,35 @@ class GraphScreen extends React.Component {
           </View>
         </View>
 
-        <View style={{ height: 200, flexDirection: 'row' }}>
-                <YAxis
-                    data={ data }
-                    contentInset={ contentInset }
-                    svg={{
-                        fill: 'grey',
-                        fontSize: 10,
-                    }}
-                    numberOfTicks={ 5 }
-                    formatLabel={ value => `${value}ºC` }
-                />
-                <LineChart
-                    style={{ flex: 1, marginLeft: 16 }}
-                    data={ data }
-                    svg={{ stroke: 'rgb(134, 65, 244)' }}
-                    contentInset={ contentInset }
-                >
-                    <Grid/>
-                </LineChart>
-            </View>
+        <View style={styles.chart}>
+          <YAxis
+            data={ data }
+            contentInset={ contentInset }
+            svg={{
+                fill: 'grey',
+                fontSize: 10,
+            }}
+            numberOfTicks={ 5 }
+            formatLabel={ value => `${value}ºC` }
+          />
+          <LineChart
+            style={{ flex: 1, marginLeft: 7 }}
+            data={ data }
+            svg={{ stroke: 'rgb(134, 65, 244)' }}
+            contentInset={ contentInset }
+          >
+          <Grid />
+          </LineChart>
+        </View>
+        <View style={styles.chartX}>
+          <Text>{this.state.labelsTest[0]}</Text>
+          <Text>{this.state.labelsTest[labelLength]}</Text>
+        </View>
+
+        <View style={styles.infoTextContainer}>
+          <Text style={styles.infoTextTitle}>Information</Text>
+          <Text style={styles.infoText}>Too cold is not good and too hot is definitely disastrous. A temperature around 18 ° C is the most ideal temperature to study.</Text>
+        </View>
 
       </View>
     )
@@ -473,6 +483,34 @@ const styles = StyleSheet.create({
     width:'100%',
     height:200,
     resizeMode:'cover',
+  },
+  chart: {
+    height: 200,
+    flexDirection: 'row',
+    paddingLeft: 7,
+    paddingRight: 35,
+    paddingBottom: 0,
+  },
+  chartX: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 35,
+    paddingTop: 0,
+  },
+  infoTextContainer: {
+    paddingTop: 0,
+    padding: 35,
+  },
+  infoTextTitle: {
+    fontSize: 21,
+    fontFamily: 'Lato-Bold',
+    color: '#252525',
+    paddingBottom: 10,
+  },
+  infoText: {
+    fontSize: 16,
+    fontFamily: 'Karla-Regular',
+    color: '#252525',
   }
 });
 
