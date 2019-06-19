@@ -135,7 +135,7 @@ class DetailsScreen extends React.Component {
 
   componentDidMount() {
     const {navigation} = this.props;
-    const itemId = navigation.getParam('itemId', 'NO-ID');
+    const itemId = navigation.getParam('itemId', '');
     fetch("https://testrest1.herokuapp.com/getglobalsensordata?sensor="+itemId)
     .then((result)=>result.json())
     .then((res)=>{
@@ -195,12 +195,12 @@ class DetailsScreen extends React.Component {
 
   render() {
     const {navigation} = this.props;
-    const itemId = navigation.getParam('itemId', 'NO-ID');
+    const itemId = navigation.getParam('itemId', '');
     return (
       <ScrollView>
         <View style={styles.header}>
           <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Home')}>
-            <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
+            <Image style={styles.backArrow} source={require('./assets/images/arrowLeft.png')} />
           </TouchableOpacity>
                  <FlatList
                   data={[this.state.data]}
@@ -233,8 +233,10 @@ class DetailsScreen extends React.Component {
                 <Text style={styles.detailText}>{item.airquality}%  Air Quality</Text>
               </View>
               <View style={styles.detailRight}>
-                <Text style={styles.moreInfo}>More info</Text>
-                <Image style={styles.arrowImage} source={require('./assets/images/arrowRight.png')} />
+                <Text style={styles.moreInfo}>
+                  More info &nbsp;
+                  <Image style={styles.detailArrow} source={require('./assets/images/arrowRight.png')} />
+                </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, quantity: 'temp' })}}>
@@ -243,8 +245,10 @@ class DetailsScreen extends React.Component {
                 <Text style={styles.detailText}>{item.temperature}° Celcius</Text>
               </View>
               <View style={styles.detailRight}>
-                <Text style={styles.moreInfo}>More info</Text>
-                <Image style={styles.arrowImage} source={require('./assets/images/arrowRight.png')} />
+                <Text style={styles.moreInfo}>
+                  More info &nbsp;
+                  <Image style={styles.detailArrow} source={require('./assets/images/arrowRight.png')} />
+                </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, quantity: 'hum' })}}>
@@ -253,8 +257,10 @@ class DetailsScreen extends React.Component {
                 <Text style={styles.detailText}>{item.humidity}%  Humidity</Text>
               </View>
               <View style={styles.detailRight}>
-                <Text style={styles.moreInfo}>More info</Text>
-                <Image style={styles.arrowImage} source={require('./assets/images/arrowRight.png')} />
+                <Text style={styles.moreInfo}>
+                  More info &nbsp;
+                  <Image style={styles.detailArrow} source={require('./assets/images/arrowRight.png')} />
+                </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, quantity: 'press' })}}>
@@ -263,8 +269,10 @@ class DetailsScreen extends React.Component {
                 <Text style={styles.detailText}>{item.pressure}  Hecto Pascal</Text>
               </View>
               <View style={styles.detailRight}>
-                <Text style={styles.moreInfo}>More info</Text>
-                <Image style={styles.arrowImage} source={require('./assets/images/arrowRight.png')} />
+                <Text style={styles.moreInfo}>
+                  More info &nbsp;
+                  <Image style={styles.detailArrow} source={require('./assets/images/arrowRight.png')} />
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -323,7 +331,7 @@ class GraphScreen extends React.Component {
       <ScrollView>
         <View style={styles.header}>
           <TouchableOpacity style={styles.hdrLeftBtn} onPress={() => this.props.navigation.navigate('Details')}>
-            <Image style={styles.arrowImage} source={require('./assets/images/arrowLeft.png')} />
+            <Image style={styles.backArrow} source={require('./assets/images/arrowLeft.png')} />
           </TouchableOpacity>
           <View style={styles.hdrCtr}>
             <View style={styles.hdrCtrTop}>
@@ -377,13 +385,17 @@ const AppNavigator = createStackNavigator(
     Graph: { screen: GraphScreen, navigationOptions: { header: null } },
   },
   {
-    initialRouteName: "Details"
+    initialRouteName: "Home"
   }
 );
 
 const AppContainer = createAppContainer(AppNavigator);
 
 const styles = StyleSheet.create({
+  testDing: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
   filterModal: {
     margin: 0,
     justifyContent: 'flex-end',
@@ -466,10 +478,9 @@ const styles = StyleSheet.create({
     //flex: 1,
     //backgroundColor: 'red',
   },
-  arrowImage: {
+  backArrow: {
     width: 5,
     height: 8,
-    backgroundColor: 'red'
   },
   hdrCtr: {
     flex: 8,
@@ -573,18 +584,17 @@ const styles = StyleSheet.create({
     resizeMode:'cover',
     marginBottom: 4,
   },
-  detailRight: {
-    justifyContent: 'space-between',
-    paddingRight: 40,
-  },
   moreInfo: {
     fontFamily: 'Karla-Regular',
     fontSize: 16,
     color: '#252525',
-    backgroundColor: 'green',
     paddingTop: 20,
     paddingBottom: 20,
-    paddingRight: 10,
+    paddingRight: 20,
+  },
+  detailArrow: {
+    width: 5,
+    height: 8,
   },
   chart: {
     height: 200,
