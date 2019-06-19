@@ -96,14 +96,6 @@ class HomeScreen extends Component<Props> {
               <Text style={styles.filterTitle}>Filters</Text>
               <TouchableOpacity style={styles.filterOptionContainer}>
                 <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
-                <Text style={styles.filterOption}>Best</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.filterOptionContainer}>
-                <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
-                <Text style={styles.filterOption}>Worst</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.filterOptionContainer}>
-                <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
                 <Text style={styles.filterOption}>Warmest</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.filterOptionContainer}>
