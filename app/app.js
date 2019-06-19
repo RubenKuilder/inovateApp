@@ -447,6 +447,8 @@ const styles = StyleSheet.create({
   },
   filterArrow: {
     marginRight: 10,
+    height: 5,
+    width: 8,
   },
   filterCloseContainer: {
     paddingLeft: 35,
