@@ -42,9 +42,24 @@ class HomeScreen extends Component<Props> {
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
+  
+  refreshScreen = () => {
+    //const filterParam = navigation.getParam('filterParam', '');
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+
+    fetch("https://testrest1.herokuapp.com/getallsensors")
+    .then((result)=>result.json())
+    .then((res)=>{
+      this.setState({
+        data:res.sensoren
+      })
+    })
+  };
 
   render() {
-    const {navigate} = this.props.navigation;
+    // const {navigation} = this.props;
+    // const filterParam = navigation.getParam('filterParam', '');
+    //console.warn(filterParam);
     return (
       <View>
         <ScrollView style={styles.container}>
@@ -94,13 +109,13 @@ class HomeScreen extends Component<Props> {
           <Modal style={styles.filterModal} isVisible={this.state.isModalVisible} onBackdropPress={() => this.setState({ isVisible: false })}>
             <View style={styles.overlayContent}>
               <Text style={styles.filterTitle}>Filters</Text>
-              <TouchableOpacity style={styles.filterOptionContainer}>
+              <TouchableOpacity style={styles.filterOptionContainer} onPress={this.refreshScreen}>
                 <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
                 <Text style={styles.filterOption}>Warmest</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.filterOptionContainer}>
+              <TouchableOpacity style={styles.filterOptionContainer} onPress={this.refreshScreen}>
                 <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
-                <Text style={styles.filterOption}>Coldest</Text>
+                <Text style={styles.filterOption}>Coolest</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.filterCloseContainer} onPress={this.toggleModal}>
                 <Text style={styles.filterCloseBtn}>Close</Text>
