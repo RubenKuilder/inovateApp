@@ -227,22 +227,45 @@ class DetailsScreen extends React.Component {
         renderItem={ ({item}) =>
           <View>  
             <Image style={styles.detailImage} source={{uri: item.imageURL}} />
-            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, })}}>
-              <View style={[styles.detailBorder, {backgroundColor: this.state.airqualityColor}]}></View>
-              <Text style={styles.detailText}>{item.airquality}%  Air Quality</Text>
-              <Text>More info ></Text>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, quantity: 'air'})}}>
+              <View style={styles.detailLeft}>
+                <View style={[styles.detailBorder, {backgroundColor: this.state.airqualityColor}]}></View>
+                <Text style={styles.detailText}>{item.airquality}%  Air Quality</Text>
+              </View>
+              <View style={styles.detailRight}>
+                <Text style={styles.moreInfo}>More info</Text>
+                <Image style={styles.arrowImage} source={require('./assets/images/arrowRight.png')} />
+              </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, })}}>
-              <View style={[styles.detailBorder, {backgroundColor: this.state.temperatureColor}]}></View>
-              <Text style={styles.detailText}>{item.temperature}° Celcius</Text>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, quantity: 'temp' })}}>
+              <View style={styles.detailLeft}>
+                <View style={[styles.detailBorder, {backgroundColor: this.state.temperatureColor}]}></View>
+                <Text style={styles.detailText}>{item.temperature}° Celcius</Text>
+              </View>
+              <View style={styles.detailRight}>
+                <Text style={styles.moreInfo}>More info</Text>
+                <Image style={styles.arrowImage} source={require('./assets/images/arrowRight.png')} />
+              </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, })}}>
-              <View style={[styles.detailBorder, {backgroundColor: this.state.humidityColor}]}></View>
-              <Text style={styles.detailText}>{item.humidity}%  Humidity</Text>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, quantity: 'hum' })}}>
+              <View style={styles.detailLeft}>
+                <View style={[styles.detailBorder, {backgroundColor: this.state.humidityColor}]}></View>
+                <Text style={styles.detailText}>{item.humidity}%  Humidity</Text>
+              </View>
+              <View style={styles.detailRight}>
+                <Text style={styles.moreInfo}>More info</Text>
+                <Image style={styles.arrowImage} source={require('./assets/images/arrowRight.png')} />
+              </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, })}}>
-              <View style={[styles.detailBorder, {backgroundColor: this.state.pressureColor}]}></View>
-              <Text style={styles.detailText}>{item.pressure}  Hecto Pascal</Text>
+            <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, quantity: 'press' })}}>
+              <View style={styles.detailLeft}>
+                <View style={[styles.detailBorder, {backgroundColor: this.state.pressureColor}]}></View>
+                <Text style={styles.detailText}>{item.pressure}  Hecto Pascal</Text>
+              </View>
+              <View style={styles.detailRight}>
+                <Text style={styles.moreInfo}>More info</Text>
+                <Image style={styles.arrowImage} source={require('./assets/images/arrowRight.png')} />
+              </View>
             </TouchableOpacity>
           </View>
         }
@@ -259,13 +282,17 @@ class GraphScreen extends React.Component {
     this.state = {
       labelsTest: [],
       valuesTest: [],
+      graphTitle: '',
+      graphDesc: '',
+      yValue: '',
     }
   }
 
   componentDidMount() {
     const {navigation} = this.props;
-    const itemId = navigation.getParam('itemId', 'NO-ID');
-    fetch("https://testrest1.herokuapp.com/getchartdata?sensor="+ itemId +"&quantity=temp")
+    const itemId = navigation.getParam('itemId', '');
+    const quantity = navigation.getParam('quantity', '');
+    fetch("https://testrest1.herokuapp.com/getchartdata?sensor="+ itemId +"&quantity="+quantity)
     .then((result)=>result.json())
     .then((res)=>{
       this.setState({
@@ -277,18 +304,20 @@ class GraphScreen extends React.Component {
         valuesTest: res.metingen.map(obj => {
           return obj.value;
         }),
+
+        graphTitle: res.title,
+        graphDesc: res.description,
       });
     })
   }
 
   render() {
     const {navigation} = this.props;
-    const itemId = navigation.getParam('itemId', 'NO-ID');
+    const itemId = navigation.getParam('itemId', '');
+    const quantity = navigation.getParam('quantity', '');
     const data = this.state.valuesTest;
     const contentInset = { top: 20, bottom: 20 };
     const labelLength = this.state.labelsTest.length - 1;
-
-    console.warn(itemId);
 
     return(
       <ScrollView>
@@ -299,7 +328,7 @@ class GraphScreen extends React.Component {
           <View style={styles.hdrCtr}>
             <View style={styles.hdrCtrTop}>
              <Text style={styles.hdrTitle}>
-              Title here
+              {this.state.graphTitle}
              </Text>
             </View>
           </View>
@@ -314,7 +343,7 @@ class GraphScreen extends React.Component {
                 fontSize: 10,
             }}
             numberOfTicks={ 5 }
-            formatLabel={ value => `${value}ºC` }
+            formatLabel={value => `${value}`}
           />
           <LineChart
             style={{ flex: 1, marginLeft: 7 }}
@@ -333,7 +362,7 @@ class GraphScreen extends React.Component {
 
         <View style={styles.infoTextContainer}>
           <Text style={styles.infoTextTitle}>Information</Text>
-          <Text style={styles.infoText}>Too cold is not good and too hot is definitely disastrous. A temperature around 18 ° C is the most ideal temperature to study.</Text>
+          <Text style={styles.infoText}>{this.state.graphDesc}</Text>
         </View>
 
       </ScrollView>
@@ -348,7 +377,7 @@ const AppNavigator = createStackNavigator(
     Graph: { screen: GraphScreen, navigationOptions: { header: null } },
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Details"
   }
 );
 
@@ -440,6 +469,7 @@ const styles = StyleSheet.create({
   arrowImage: {
     width: 5,
     height: 8,
+    backgroundColor: 'red'
   },
   hdrCtr: {
     flex: 8,
@@ -510,6 +540,8 @@ const styles = StyleSheet.create({
   detailContainer: {
     flex: 1,
     marginBottom: 4,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   detailBorder: {
     position: 'absolute',
@@ -539,7 +571,20 @@ const styles = StyleSheet.create({
     width:'100%',
     height:200,
     resizeMode:'cover',
-    marginBottom: 10,
+    marginBottom: 4,
+  },
+  detailRight: {
+    justifyContent: 'space-between',
+    paddingRight: 40,
+  },
+  moreInfo: {
+    fontFamily: 'Karla-Regular',
+    fontSize: 16,
+    color: '#252525',
+    backgroundColor: 'green',
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingRight: 10,
   },
   chart: {
     height: 200,
