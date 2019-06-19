@@ -26,7 +26,7 @@ class HomeScreen extends Component<Props> {
   }
 
   componentDidMount() {
-    fetch("https://testrest1.herokuapp.com/getallsensors")
+    fetch("https://testrest1.herokuapp.com/getallsensors?filter=none")
     .then((result)=>result.json())
     .then((res)=>{
       this.setState({
@@ -43,11 +43,11 @@ class HomeScreen extends Component<Props> {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
   
-  refreshScreen = () => {
-    //const filterParam = navigation.getParam('filterParam', '');
+  refreshScreenCoolest = () => {
+    // const filterParam = navigation.getParam('filterParam', '');
     this.setState({ isModalVisible: !this.state.isModalVisible });
 
-    fetch("https://testrest1.herokuapp.com/getallsensors")
+    fetch("https://testrest1.herokuapp.com/getallsensors?filter=coolest")
     .then((result)=>result.json())
     .then((res)=>{
       this.setState({
@@ -56,10 +56,21 @@ class HomeScreen extends Component<Props> {
     })
   };
 
+  refreshScreenWarmest = () => {
+  this.setState({ isModalVisible: !this.state.isModalVisible });
+
+  fetch("https://testrest1.herokuapp.com/getallsensors?filter=warmest")
+  .then((result)=>result.json())
+  .then((res)=>{
+    this.setState({
+      data:res.sensoren
+    })
+  })
+};
+
   render() {
     // const {navigation} = this.props;
     // const filterParam = navigation.getParam('filterParam', '');
-    //console.warn(filterParam);
     return (
       <View>
         <ScrollView style={styles.container}>
@@ -96,7 +107,10 @@ class HomeScreen extends Component<Props> {
               <Image style={styles.cardImage} source={{uri: item.imageURL}} />
               <View style={styles.cardTextCont}>
                 <Text style={styles.cardTitle}>{item.locationname}</Text>
-                <Text style={styles.cardText}>{item.description}</Text>
+                <Text style={styles.cardText}>
+                  <Text>{item.temperature} °C</Text>
+                  <Text>Airquality {item.airquality}%</Text>
+                </Text>
               </View>
             </TouchableOpacity>
           }
@@ -109,11 +123,11 @@ class HomeScreen extends Component<Props> {
           <Modal style={styles.filterModal} isVisible={this.state.isModalVisible} onBackdropPress={() => this.setState({ isVisible: false })}>
             <View style={styles.overlayContent}>
               <Text style={styles.filterTitle}>Filters</Text>
-              <TouchableOpacity style={styles.filterOptionContainer} onPress={this.refreshScreen}>
+              <TouchableOpacity style={styles.filterOptionContainer} onPress={this.refreshScreenWarmest}>
                 <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
                 <Text style={styles.filterOption}>Warmest</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.filterOptionContainer} onPress={this.refreshScreen}>
+              <TouchableOpacity style={styles.filterOptionContainer} onPress={this.refreshScreenCoolest}>
                 <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
                 <Text style={styles.filterOption}>Coolest</Text>
               </TouchableOpacity>
@@ -249,7 +263,7 @@ class DetailsScreen extends React.Component {
             <TouchableOpacity style={styles.detailContainer} onPress={() => {this.props.navigation.navigate('Graph', { itemId: itemId, quantity: 'temp' })}}>
               <View style={styles.detailLeft}>
                 <View style={[styles.detailBorder, {backgroundColor: this.state.temperatureColor}]}></View>
-                <Text style={styles.detailText}>{item.temperature}° Celcius</Text>
+                <Text style={styles.detailText}>{item.temperature} °Celcius</Text>
               </View>
               <View style={styles.detailRight}>
                 <Text style={styles.moreInfo}>
@@ -553,9 +567,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Heavy',
   },
   cardText: {
+    flex: 8,
     fontSize:12,
     color:'#252525',
     fontFamily: 'Karla-Regular',
+    justifyContent: 'space-between',
   },
   detailContainer: {
     flex: 1,
