@@ -21,8 +21,7 @@ class HomeScreen extends Component<Props> {
   constructor() {
     super();
     this.state={
-      data: [],
-      isFilterApplied: 'No filter applied',
+      data: []
     }
   }
 
@@ -43,25 +42,12 @@ class HomeScreen extends Component<Props> {
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
-
-  refreshScreen(filterParam) {
-    if(filterParam == 'none') {
-      this.setState({ isFilterApplied: 'No filter applied' });
-    } else if(filterParam == 'warmest') {
-      this.setState({ isFilterApplied: 'Applied filter: warmest' });
-    } else if(filterParam == 'coolest') {
-      this.setState({ isFilterApplied: 'Applied filter: coolest' });
-    } else if(filterParam == 'best') {
-      this.setState({ isFilterApplied: 'Applied filter: best' });
-    } else if(filterParam == 'worst') {
-      this.setState({ isFilterApplied: 'Applied filter: worst' });
-    } else {
-      this.setState({ isFilterApplied: 'No idea what filter you have applied this time...' });
-    }
-
+  
+  refreshScreenCoolest = () => {
+    // const filterParam = navigation.getParam('filterParam', '');
     this.setState({ isModalVisible: !this.state.isModalVisible });
 
-    fetch("https://testrest1.herokuapp.com/getallsensors?filter="+filterParam)
+    fetch("https://testrest1.herokuapp.com/getallsensors?filter=coolest")
     .then((result)=>result.json())
     .then((res)=>{
       this.setState({
@@ -70,7 +56,21 @@ class HomeScreen extends Component<Props> {
     })
   };
 
+  refreshScreenWarmest = () => {
+  this.setState({ isModalVisible: !this.state.isModalVisible });
+
+  fetch("https://testrest1.herokuapp.com/getallsensors?filter=warmest")
+  .then((result)=>result.json())
+  .then((res)=>{
+    this.setState({
+      data:res.sensoren
+    })
+  })
+};
+
   render() {
+    // const {navigation} = this.props;
+    // const filterParam = navigation.getParam('filterParam', '');
     return (
       <View>
         <ScrollView style={styles.container}>
@@ -85,7 +85,7 @@ class HomeScreen extends Component<Props> {
               </View>
               <View style={styles.hdrCtrBottom}>
                 <Text style={styles.hdrSubTitle}>
-                  {this.state.isFilterApplied}
+                  No filter applied
                 </Text>
               </View>
             </View>
@@ -107,10 +107,10 @@ class HomeScreen extends Component<Props> {
               <Image style={styles.cardImage} source={{uri: item.imageURL}} />
               <View style={styles.cardTextCont}>
                 <Text style={styles.cardTitle}>{item.locationname}</Text>
-                <View style={styles.cardText}>
+                <Text style={styles.cardText}>
                   <Text>{item.temperature} °C</Text>
                   <Text>Airquality {item.airquality}%</Text>
-                </View>
+                </Text>
               </View>
             </TouchableOpacity>
           }
@@ -123,25 +123,13 @@ class HomeScreen extends Component<Props> {
           <Modal style={styles.filterModal} isVisible={this.state.isModalVisible} onBackdropPress={() => this.setState({ isVisible: false })}>
             <View style={styles.overlayContent}>
               <Text style={styles.filterTitle}>Filters</Text>
-              <TouchableOpacity style={styles.filterOptionContainer} onPress={() => this.refreshScreen('none')}>
-                <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
-                <Text style={styles.filterOption}>No filter</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.filterOptionContainer} onPress={() => this.refreshScreen('warmest')}>
+              <TouchableOpacity style={styles.filterOptionContainer} onPress={this.refreshScreenWarmest}>
                 <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
                 <Text style={styles.filterOption}>Warmest</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.filterOptionContainer} onPress={() => this.refreshScreen('coolest')}>
+              <TouchableOpacity style={styles.filterOptionContainer} onPress={this.refreshScreenCoolest}>
                 <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
                 <Text style={styles.filterOption}>Coolest</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.filterOptionContainer} onPress={() => this.refreshScreen('best')}>
-                <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
-                <Text style={styles.filterOption}>Best</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.filterOptionContainer} onPress={() => this.refreshScreen('worst')}>
-                <Image style={styles.filterArrow} source={require('./assets/images/arrowUp.png')} />
-                <Text style={styles.filterOption}>Worst</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.filterCloseContainer} onPress={this.toggleModal}>
                 <Text style={styles.filterCloseBtn}>Close</Text>
@@ -545,7 +533,7 @@ const styles = StyleSheet.create({
   },
   hdrSubTitle: {
     color: '#252525',
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: 'Lato-Light',
   },
   filterImg: {
@@ -577,12 +565,13 @@ const styles = StyleSheet.create({
     fontSize:20,
     color:'#252525',
     fontFamily: 'Lato-Heavy',
-    marginBottom: 10,
   },
   cardText: {
-    fontSize:16,
+    flex: 8,
+    fontSize:12,
     color:'#252525',
     fontFamily: 'Karla-Regular',
+    justifyContent: 'space-between',
   },
   detailContainer: {
     flex: 1,
